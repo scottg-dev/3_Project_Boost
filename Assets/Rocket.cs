@@ -7,8 +7,9 @@ public class Rocket : MonoBehaviour {
 
     Rigidbody mvRigidBody;
     AudioSource mvAudioSource;
-	// Use this for initialization
-	void Start () {
+    [SerializeField] float mvRcsThrust = 100f;
+    // Use this for initialization
+    void Start () {
         mvRigidBody = GetComponent<Rigidbody>();
         mvAudioSource = GetComponent<AudioSource>();
 	}
@@ -22,15 +23,18 @@ public class Rocket : MonoBehaviour {
     {
         mvRigidBody.freezeRotation = true; //take manual control of rotation
 
+        float lvRcsThrust = 100f;
+
+        float lvRotationThisFrame = lvRcsThrust * Time.deltaTime;
         if (Input.GetKey(KeyCode.A))
         {
             //print("Rotating left");
-            transform.Rotate(Vector3.forward);
+            transform.Rotate(Vector3.forward * lvRotationThisFrame);
         }
         else if (Input.GetKey(KeyCode.D))
         {
             //print("Rotating right");
-            transform.Rotate(-Vector3.forward);
+            transform.Rotate(-Vector3.forward * lvRotationThisFrame);
         }
 
         mvRigidBody.freezeRotation = false;//resume physics control of rotation
