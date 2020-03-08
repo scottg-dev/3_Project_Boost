@@ -7,7 +7,8 @@ public class Rocket : MonoBehaviour {
 
     Rigidbody mvRigidBody;
     AudioSource mvAudioSource;
-    [SerializeField] float mvRcsThrust = 100f;
+    [SerializeField] float mvRcsThrust = 250f;
+    [SerializeField] float mvMainThrust = 1f;
     // Use this for initialization
     void Start () {
         mvRigidBody = GetComponent<Rigidbody>();
@@ -45,7 +46,7 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(KeyCode.Space))// can thrust while rotating
         {
             //print("Thrusting");
-            mvRigidBody.AddRelativeForce(Vector3.up);
+            mvRigidBody.AddRelativeForce(Vector3.up * mvMainThrust);
             if (!mvAudioSource.isPlaying)// so it doesn't layer on top of each other.
             {
                 mvAudioSource.Play();
@@ -55,5 +56,30 @@ public class Rocket : MonoBehaviour {
         {
             mvAudioSource.Stop();
         }
+    }
+
+    void OnCollisionEnter(Collision pvcollision)
+    {
+        print("Collided");
+        switch (pvcollision.gameObject.tag)
+        {
+            case "Friendly":
+                print("OK");//todo remove
+                //do nothing
+                break;
+            case "Fuel":
+                print("Fuel");//todo remove
+                break;
+            default:
+                print("Dead");
+                //kill player
+                break;
+        }
+        //foreach (ContactPoint lvcontact in pvcollision.contacts)
+        //{
+        //    Debug.DrawRay(lvcontact.point, lvcontact.normal, Color.white);
+        //}
+        //if (lvcontact.relativeVelocity.magnitude > 2)
+        //    mvAudioSource.Play();
     }
 }
